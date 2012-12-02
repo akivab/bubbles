@@ -48,6 +48,7 @@ public class ViewMeActivity extends Activity {
 
 	private SurfaceView mLocalViewSurface;
 	private SurfaceView mRemoteViewSurface;
+
 	private CameraMediaSource mCameraMediaSource;
 
 	
@@ -67,10 +68,9 @@ public class ViewMeActivity extends Activity {
 		// Init surfaces and camera
 		mLocalViewSurface = (SurfaceView) findViewById(R.id.video_local);
 		mLocalViewSurface.setZOrderMediaOverlay(true);
-		mCameraMediaSource = new CameraMediaSource(
-				CameraMediaSource.CAMERA_FRONT, mLocalViewSurface);
 		mRemoteViewSurface = (SurfaceView) findViewById(R.id.video_remote);
-
+		mCameraMediaSource = new CameraMediaSource(
+				CameraMediaSource.CAMERA_FRONT, mRemoteViewSurface);
 		if (mIsSender) {
 			mChallengeReceiverDisplayName = i
 					.getStringExtra(JibeIntents.EXTRA_DISPLAYNAME);
@@ -84,7 +84,7 @@ public class ViewMeActivity extends Activity {
 		}
 		
 		WebView myWebView = (WebView) findViewById(R.id.gameplay);
-		myWebView.loadUrl("http://lluncorstock.appspot.com/to25");
+		myWebView.loadUrl("http://spheromusic.appspot.com/gamestuff/index.html");
 		WebSettings webSettings = myWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 		myWebView.addJavascriptInterface(new JSInterface(this), "Android");
@@ -289,7 +289,7 @@ public class ViewMeActivity extends Activity {
 		}
 
 		mVideoConnection = new VideoCallConnection(getApplicationContext(),
-				mVideoConnStateListener, mCameraMediaSource, mRemoteViewSurface);
+				mVideoConnStateListener, mCameraMediaSource, mLocalViewSurface);
 		mVideoConnection.setAutoAccept(true);
 	}
 
