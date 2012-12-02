@@ -24,8 +24,9 @@ import android.os.Message;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Toast;
-import com.beeyunks.bubbles.R;
 
 public class ViewMeActivity extends Activity {
 
@@ -81,6 +82,11 @@ public class ViewMeActivity extends Activity {
 					.getStringExtra(JibeIntents.EXTRA_DISPLAYNAME);
 			showReceiverSideDialog();
 		}
+		
+		WebView myWebView = (WebView) findViewById(R.id.gameplay);
+		myWebView.loadUrl("http://lluncorstock.appspot.com/to25");
+		WebSettings webSettings = myWebView.getSettings();
+		webSettings.setJavaScriptEnabled(true);
 	}
 
 	
