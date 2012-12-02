@@ -1,0 +1,45 @@
+<!DOCTYPE html> 
+<html> 
+  <head> 
+  <title>My Page</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+  <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+</head> 
+<body> 
+<div data-role="page">
+<ul id="gamelist" data-role="listview" data-theme="c"></ul>
+</div>
+<script>
+var list = document.getElementById("gamelist");
+var games = [
+["http://lluncorstock.appspot.com/to25", "Number Pop"],
+["bubblepop.html", "Bubble Pop"]];
+var jibe = {};
+jibe.receiveMessage = function(str) {
+  var map = JSON.parse(str);
+  window.location.href = map.choose;
+};
+
+for (var i = 0; i < games.length; i++) {
+  var game = games[i];
+  addGame(games[i]);
+}
+
+function addGame(game) {
+  var a = document.createElement("a");
+  a.appendChild(document.createTextNode(game[1]));
+  a.href = "#";
+  a.onclick = function(evt) {
+    Android.sendMessage({choose: game[0]});
+    window.location.href = game[0];
+  };
+  var li = document.createElement("li");
+  li.appendChild(a);
+  list.appendChild(li);
+}
+</script>
+</body>
+</html>
+
