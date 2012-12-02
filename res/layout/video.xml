@@ -14,8 +14,10 @@
     
     <SurfaceView
         android:id="@+id/video_remote"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:adjustViewBounds="true"
+        android:layout_gravity="right|bottom"
         android:visibility="visible" />
     
     <SurfaceView

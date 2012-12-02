@@ -374,6 +374,11 @@ public class ViewMeActivity extends Activity {
 			}
 		}
 		
+		public void redirect(String url) {
+			WebView myWebView = (WebView) findViewById(R.id.gameplay);
+			myWebView.loadUrl(url);
+		}
+		
 		public void receiveMessage(String s) {
 			WebView myWebView = (WebView) findViewById(R.id.gameplay);
 			myWebView.loadUrl("javascript:jibe.receiveMessage('" + s + "')");
