@@ -87,6 +87,7 @@ public class ViewMeActivity extends Activity {
 		myWebView.loadUrl("http://lluncorstock.appspot.com/to25");
 		WebSettings webSettings = myWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
+		myWebView.addJavascriptInterface(new JSInterface(this), "Android");
 	}
 
 	
@@ -162,11 +163,10 @@ public class ViewMeActivity extends Activity {
 
 		
 		public void jibeBundleReceived(JibeBundle jibeBundle) {
-			Log.d(TAG, "Received bundle=" + jibeBundle);
-			long timestamp = jibeBundle.getLong("ts", -1);
-			String str = "Received TS: " + timestamp;
+			String s = jibeBundle.getString("jsString");
+			Log.d(TAG, "Received bundle=" + s);
 			Bundle bundle = new Bundle();
-			bundle.putString("data_str", str);
+			bundle.putString("data_str", s);
 			Message msg = new Message();
 			msg.setData(bundle);
 			mHandler.sendMessage(msg);
@@ -185,7 +185,8 @@ public class ViewMeActivity extends Activity {
 				return;
 			}
 
-			showMessage(msg.getData().getString("data_str"));
+
+			sendJsMessage(msg.getData().getString("data_str"));
 		}
 	};
 
@@ -329,6 +330,20 @@ public class ViewMeActivity extends Activity {
 		}
 	};
 
+	private void sendJsMessage(final String message) {
+		if (Looper.getMainLooper().getThread() != Thread.currentThread()) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					sendJsMessage(message);
+				}
+			});
+
+			return;
+		}
+		JSInterface jsInterface = new JSInterface(this);
+		jsInterface.receiveMessage(message);
+	}
+	
 	private void showMessage(final String message) {
 		if (Looper.getMainLooper().getThread() != Thread.currentThread()) {
 			runOnUiThread(new Runnable() {
@@ -341,5 +356,28 @@ public class ViewMeActivity extends Activity {
 		}
 
 		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	}
+	
+	private class JSInterface {
+
+		public JSInterface(ViewMeActivity viewMeActivity) {
+		}
+		
+		@SuppressWarnings("unused")
+		public void sendMessage(String s) {
+			JibeBundle jb = new JibeBundle();
+			jb.putString("jsString", s);
+			try {
+				mBundleConnection.send(jb);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		public void receiveMessage(String s) {
+			WebView myWebView = (WebView) findViewById(R.id.gameplay);
+			myWebView.loadUrl("javascript:jibe.receiveMessage('" + s + "')");
+		}
+		
 	}
 }
