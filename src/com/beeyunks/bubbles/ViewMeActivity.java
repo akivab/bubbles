@@ -84,9 +84,10 @@ public class ViewMeActivity extends Activity {
 		}
 		
 		WebView myWebView = (WebView) findViewById(R.id.gameplay);
-		myWebView.loadUrl("http://spheromusic.appspot.com/gamestuff/index.html");
+		myWebView.loadUrl("http://lluncorstock.appspot.com/gameportal");
 		WebSettings webSettings = myWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
+		webSettings.setDomStorageEnabled(true);
 		myWebView.addJavascriptInterface(new JSInterface(this), "Android");
 	}
 
