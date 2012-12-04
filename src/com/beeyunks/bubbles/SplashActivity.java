@@ -17,8 +17,8 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.beeyunks.bubbles.R;
 
 public class SplashActivity extends Activity {
 
@@ -28,6 +28,7 @@ public class SplashActivity extends Activity {
 	private ArenaHelper mArenaHelper;
 	private AlertDialog mDownloadDialog;
 	private boolean mIsEngineInstalled;
+	private boolean isFirstTime = true;
 
 	private static final int MSG_CONNECTION_ONLINE = 1;
 	private static final int MSG_CONNECTION_OFFLINE = 2;
@@ -43,7 +44,8 @@ public class SplashActivity extends Activity {
 
 	public void onStart() {
 		super.onStart();
-
+		((ProgressBar) SplashActivity.this.findViewById(R.id.progressBar))
+		.setVisibility(ProgressBar.INVISIBLE);
 		mIsEngineInstalled = ArenaHelper
 				.isCompatibleRealtimeEngineInstalled(this);
 
@@ -64,7 +66,6 @@ public class SplashActivity extends Activity {
 				createDownloadDialog();
 			}
 		}
-
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public class SplashActivity extends Activity {
 			mArenaHelper.dispose();
 		}
 	}
-
+	
 	private void createDownloadDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.dlg_download_title);
@@ -110,6 +111,8 @@ public class SplashActivity extends Activity {
 	}
 
 	public void onClickLaunchFriendPicker(View view) {
+		((ProgressBar) SplashActivity.this.findViewById(R.id.progressBar))
+		.setVisibility(ProgressBar.VISIBLE);
 		mArenaHelper = new ArenaHelper(this, mArenaHelperListener);
 	}
 
@@ -163,24 +166,25 @@ public class SplashActivity extends Activity {
 			switch (msg.what) {
 			case MSG_CONNECTION_ONLINE:
 				((Button) SplashActivity.this
-						.findViewById(R.id.friendPickerButton))
-						.setEnabled(true);
+				.findViewById(R.id.startButton))
+				.setEnabled(true);
+				if (isFirstTime) {
+					onClickLaunchFriendPicker(null);
+					isFirstTime = false;
+				}
 				Toast.makeText(SplashActivity.this, R.string.connection_online,
 						Toast.LENGTH_LONG).show();
 				break;
 			case MSG_CONNECTION_OFFLINE:
 				((Button) SplashActivity.this
-						.findViewById(R.id.friendPickerButton))
-						.setEnabled(false);
+				.findViewById(R.id.startButton))
+				.setEnabled(false);
 				Toast.makeText(SplashActivity.this,
 						R.string.connection_offline, Toast.LENGTH_LONG).show();
 				break;
 			case MSG_CONNECTION_TIMEOUT:
 				try {
 					if (!mMyProfileHelper.isOnline()) {
-						((Button) SplashActivity.this
-								.findViewById(R.id.friendPickerButton))
-								.setEnabled(false);
 						Toast.makeText(SplashActivity.this,
 								R.string.connection_failed, Toast.LENGTH_LONG)
 								.show();

@@ -84,7 +84,7 @@ public class ViewMeActivity extends Activity {
 		}
 		
 		WebView myWebView = (WebView) findViewById(R.id.gameplay);
-		myWebView.loadUrl("http://lluncorstock.appspot.com/gameportal");
+		myWebView.loadUrl("http://html5-with-jibe.appspot.com/gameportal");
 		WebSettings webSettings = myWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setDomStorageEnabled(true);
