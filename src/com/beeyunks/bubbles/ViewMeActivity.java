@@ -101,6 +101,12 @@ public class ViewMeActivity extends Activity {
 			mVideoConnection.dispose();
 		}
 	}
+	
+	protected void onPause() {
+		super.onPause();
+		finish();
+	}
+
 
 	private void showSenderSideDialog() {
 		mWaitingForReceiverToAcceptDialog = new ProgressDialog(
@@ -262,6 +268,7 @@ public class ViewMeActivity extends Activity {
 				showMessage("Connection start failed.");
 				break;
 			}
+			finish();
 		}
 
 		
